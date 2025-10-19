@@ -1,0 +1,24 @@
+import Link from "next/link";
+import "../../app/globals.css";
+
+export const metadata = {
+  title: "LMS App",
+  description: "Login and Register pages for LMS",
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body>
+        <nav className="navbar">
+          <h2>LMS App</h2>
+          <div>
+            <Link href="/">Login</Link>
+            <Link href="/register">Register</Link>
+          </div>
+        </nav>
+        <div className="main-content">{children}</div>
+      </body>
+    </html>
+  );
+}
