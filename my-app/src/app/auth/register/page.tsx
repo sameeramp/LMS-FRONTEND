@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 export default function RegisterPage() {
   const [username, setUsername] = useState("");
@@ -9,19 +10,22 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const router = useRouter();
 
-  const handleRegister = (e: any) => {
+  const handleRegister = async (e: any) => {
     e.preventDefault();
-    const storedUsers = localStorage.getItem("users");
-    const users = storedUsers ? JSON.parse(storedUsers) : [];
-    const exists = users.find((u: any) => u.email === email);
-    if (exists) {
-      alert("User already exists!");
-      return;
+    try {
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API}/auth/register`, {
+        username,
+        email,
+        password,
+      })
+      if (res.status === 200) {
+        localStorage.setItem("user", JSON.stringify(res.data));
+        router.push("/dashboard");
+      }
+    } catch (error) {
+      alert("Internal Server Error!");
     }
-    users.push({ name, email, password });
-    localStorage.setItem("users", JSON.stringify(users));
-    alert("Registration successful!");
-    router.push("/");
+    router.push("/dashboard");
   };
 
   return (
@@ -30,7 +34,7 @@ export default function RegisterPage() {
       <form onSubmit={handleRegister}>
         <input
           type="text"
-          placeholder="Username Name"
+          placeholder="Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
@@ -54,7 +58,7 @@ export default function RegisterPage() {
 
       <p>
         Already have an account?{" "}
-        <span className="link" onClick={() => router.push("/")}>
+        <span className="link" onClick={() => router.push("/auth/login")}>
           Login here
         </span>
       </p>

@@ -13,8 +13,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <nav className="navbar">
           <h2>LMS App</h2>
           <div>
-            <Link href="/">Login</Link>
-            <Link href="/register">Register</Link>
+            <Link href="/auth/login">Login</Link>
+            <Link href="/auth/register">Register</Link>
           </div>
         </nav>
         <div className="main-content">{children}</div>
