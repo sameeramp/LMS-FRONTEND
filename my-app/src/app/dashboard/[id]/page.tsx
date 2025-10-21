@@ -8,48 +8,85 @@ import { useParams } from "next/navigation";
 
 
 export default function ViewDashbord() {
-const [data, setData] = useState([]);
+    const [data, setData] = useState([]);
+    const router = useRouter();
 
 
-  const { id } = useParams();
+    const { id } = useParams();
 
     if (!id) {
-      console.warn(" Waiting for ID to be available...");
-      return;
+        console.warn(" Waiting for ID to be available...");
+        return;
     }
-    console.log(id,"id")
 
-      useEffect(() => {
+
+
+    const handleView = (_id:any) => {
+        router.push(`/ViewDashbord/${id}/${_id}`);
+    }
+
+
+    useEffect(() => {
         const user = localStorage.getItem("user");
         const token = user ? JSON.parse(user).userDetails?.token : null;
-        console.log(token,"token")
+        console.log(token, "token")
         if (!token) {
             console.error("No token found, redirecting to login.");
         }
         axios
-            .get(`${process.env.NEXT_PUBLIC_API}/course/get-one`, {
+            .get(`${process.env.NEXT_PUBLIC_API}/lesson/get-by-course?id=${id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
-                params: { id },
             })
             .then((response) => {
-                setData(response?.data?.course);
+                console.log(response, "response")
+                setData(response?.data?.courseData);
             })
             .catch((error) => {
                 console.error("Error fetching dashboard stats:", error);
             });
     }, [id]);
-console.log(data,"data")
-    
-  return (
-    <>
-    <Navbar/>
-{data.map
-        ((course: any) => (
-            <div key={course._id} className="dashboard-card">{course?.lesson}</div>      
-        ))}                                                
 
-    </>
-  );
+    return (
+        <>
+            <Navbar />
+            <div style={{
+                display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "82px",
+
+                padding: "20px",
+                justifyContent: "space-between"
+
+            }}>
+
+
+                {data.length > 0 ? (data.map
+                    ((course: any) => (
+                        <div onClick={()=>handleView(course?._id)} key={course._id}
+                            style={{
+                                border: "1px solid #ccc", borderRadius: "8px", padding: "16px",
+                                backgroundColor: "#f9f9f9",
+                                boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px"
+                            }}
+                            className="dashboard-card">
+
+                            <h2>
+                                {course?.lesson}
+                            </h2>
+                            <p>
+                                {course?.content
+                                    ?.replace(/\n/g, " ")
+                                    ?.slice(0, 150)}...
+                            </p> 
+                            <p>Status: Completed</p>
+                            
+                                               </div>
+
+                    ))) : (<p>No lessons available for this course.</p>)
+                   
+                }
+            </div>
+
+        </>
+    );
 }
