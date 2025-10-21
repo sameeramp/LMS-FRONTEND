@@ -118,6 +118,24 @@ body {
   color: #0b57cf;
 }
 
+.dashboard-grid{
+  display: "grid";
+  grid-template-columns: "repeat(3, 1fr)";
+  grid-template-rows: repeat(auto);
+   gap: "82px";
+
+  padding: "20px";
+                justify-content: "space-between";
+}
+
+.dashboard-card{
+  border: "1px solid #ccc"; 
+  border-radius: "8px";
+   padding: "16px";
+                            background-color: "#f9f9f9";
+                            box-shadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px"
+}
+
 /* ===== Animation ===== */
 @keyframes fadeIn {
   from {
