@@ -9,6 +9,14 @@ export default function LoginPage() {
     const [password, setPassword] = useState("");
     const router = useRouter();
 
+    useEffect(() => {
+        const user = localStorage.getItem("user");
+        const token = user ? JSON.parse(user).userDetails?.token : null;
+        if (token) {
+            console.error("Token is found, redirecting to Dashboard.");
+            router.push('/dashboard');
+        }
+    }, [router]);
     const handleLogin = async (e: any) => {
         e.preventDefault();
         const userDetails = localStorage.getItem("user");

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
@@ -9,6 +9,15 @@ export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    const token = user ? JSON.parse(user).userDetails?.token : null;
+    if (token) {
+      console.error("Token is found, redirecting to Dashboard.");
+      router.push('/dashboard');
+    }
+  }, [router]);
 
   const handleRegister = async (e: any) => {
     e.preventDefault();
