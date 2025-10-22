@@ -135,7 +135,15 @@ padding: 20px;
       background-color: #f9f9f9;
  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px
 }
-
+.username-heading{
+  margin-left: 10px
+}
+.view-button{
+  background-color:green;
+  border:none;
+  color:white;
+   padding:10px
+}
 /* ===== Animation ===== */
 @keyframes fadeIn {
   from {

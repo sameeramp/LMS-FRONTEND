@@ -11,7 +11,7 @@ export default function Navbar() {
   }, [])
   return (
     <nav className="navbar">
-      {token ? <div>
+      {token ? <div style={{display:"flex", justifyContent:"space-between", width:"100%"}}>
         <Link href="/dashboard">  <h2>LMS App</h2></Link>
         <Link href="/profile">Profile</Link>
       </div> : <div>

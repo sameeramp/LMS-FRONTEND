@@ -11,7 +11,7 @@ import { FiArrowUpRight } from "react-icons/fi";
 
 export default function Viwprofile() {
     const [user, setUser] = useState<any>({});
-    const [analytics, setAnalytics] = useState<any>(null);
+    const [analytics, setAnalytics] = useState<any>([]);
     const router = useRouter();
     useEffect(() => {
         const user = localStorage.getItem("user");
@@ -31,55 +31,56 @@ export default function Viwprofile() {
             .then((response) => {
                 const statsArray = response?.data?.stats || [];
                 if (statsArray.length > 0) {
-                    const courseName = Object.keys(statsArray[0])[0];
-                    const courseStats = Object.assign({}, ...statsArray[0][courseName]);
-                    setAnalytics({ courseName, stats: courseStats });
+                    setAnalytics(statsArray);
                 }
             })
             .catch((error) => {
                 console.error("Error fetching dashboard stats:", error);
             });
-    }, []); 
+    }, []);
+
     return (
         <>
             <Navbar />
-
-            <h1>Profile </h1>
-            <div >
-                {user ? (
-                    <div className="user-card" style={{
-                        border: "2px solid black", padding: "10px", borderRadius: "5px", width: "50%", margin: "auto",
-                    }}
-                        key={user.userId} >
-                        <h3>createdAt: {user?.createdAt}</h3>
-                        <p>email:{user?.email}</p>
-                        <p>isAdmin :{user?.isAdmin ? "Admin" : "User"}</p>
-                        <p>username: {user?.username}</p>
-                    </div>
-                ) : (
-                    <p>Loading...</p>
-                )}
+            <div style={{display:"flex", flexDirection:"column", gap:"20px", marginTop:"20px", width: "100%", alignItems: "center"}}>
+                <h1 style={{boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px", background: "yellow"}}>PROFILE </h1>
+                <div style={{width: "100%"}} >
+                    {user ? (
+                        <div className="user-card" style={{
+                            boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px", textAlign: "center",
+                            border: "2px solid black", padding: "10px", borderRadius: "5px", width: "50%", margin: "auto",
+                        }}
+                            key={user.userId} >
+                            <p>USERNAME: <span style={{fontStyle: "italic", fontSize: "20px", fontWeight: "bolder"}}>{user?.username}</span></p>
+                            <p>EMAIL: <span style={{fontStyle: "italic", fontSize: "20px", fontWeight: "bolder"}}>{user?.email}</span></p>
+                        </div>
+                    ) : (
+                        <p>Loading...</p>
+                    )}
+                </div>
+                <div>
+                    <h2 style={{textAlign: "center", boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px", background: "yellow"}}>Analytics</h2>
+                    {analytics.length > 0 ? analytics.map((elem: any) => {
+                        return ((
+                            <div style={{
+                                boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+                    padding: "10px", borderRadius: "5px", width: "100%", margin: "auto",
+                }} key={elem.courseId} >
+                                <h3 style={{marginTop: "5px", textAlign: "center", boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px", background: "yellow"}}>{elem.courseName}</h3>
+                                <ul>
+                                    <li>Total Lessons: <span style={{fontWeight: "bolder", background: "#969d5c"}}>{elem.totalLessons}</span></li>
+                                    <li>Attended Lessons: <span style={{fontWeight: "bolder", background: "#969d5c"}}>{elem.attendedLessons}</span></li>
+                                    <li>Completed Lessons: <span style={{fontWeight: "bolder", background: "#969d5c"}}>{elem.completedLessons}</span></li>
+                                    <li>Attended Percentage: <span style={{fontWeight: "bolder", background: "#969d5c"}}>{elem.attendedPercentage}%</span></li>
+                                    <li>Completed Percentage: <span style={{fontWeight: "bolder", background: "#969d5c"}}>{elem.completedPercentage}%</span></li>
+                                </ul>
+                            </div>
+                        ))
+                    }) : (
+                        <p>Loading analytics...</p>
+                    )}
+                </div>
             </div>
-            <div style={{
-                border: "2px solid black", padding: "10px", borderRadius: "5px", width: "50%", margin: "auto",
-            }} >
-                <h2>Analytics</h2>
-                {analytics ? (
-                    <>
-                        <h3>{analytics.courseName}</h3>
-                        <ul>
-                            <li>Total Lessons: {analytics.stats.totalLessons}</li>
-                            <li>Attended Lessons: {analytics.stats.attendedLessons}</li>
-                            <li>Completed Lessons: {analytics.stats.completedLessons}</li>
-                            <li>Attended %: {analytics.stats.attendedPercentage}%</li>
-                            <li>Completed %: {analytics.stats.completedPercentage}%</li>
-                        </ul>
-                    </>
-                ) : (
-                    <p>Loading analytics...</p>
-                )}
-            </div>
-
         </>
     );
 }

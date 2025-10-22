@@ -6,6 +6,7 @@ import axios from "axios";
 import Navbar from "@/components/Navbar";
 import "../../app/globals.css";
 import { FiArrowUpRight } from "react-icons/fi";
+import { convertTime } from "@/utils/convertTimeFn";
 
 export default function DashboardPage() {
   const [data, setData] = useState([]);
@@ -21,19 +22,6 @@ export default function DashboardPage() {
       router.push('/auth/login');
     }
     if (userDetails) {
-      //           axios
-      // .get(`${process.env.NEXT_PUBLIC_API}/user/${userDetails?.id}/stats`, {
-      //   headers: {
-      //     Authorization: `Bearer ${token}`,
-      //   },
-      // })
-      // .then((response) => {
-      //   const stats =  response?.data?.stats;        
-      //   if(stats.length>0) setData(stats);
-      // })
-      // .catch((error) => {
-      //   console.error("Error fetching dashboard stats:", error);
-      // });
       axios
         .get(`${process.env.NEXT_PUBLIC_API}/course/get-all`, {
           headers: {
@@ -49,8 +37,6 @@ export default function DashboardPage() {
     }
   }, []);
 
-  console.log(data, 'data');
-
   const handleChange = (courseId: string) => {
     router.push(`/dashboard/${courseId}`);
   };
@@ -58,21 +44,27 @@ export default function DashboardPage() {
   return (
     <>
       <Navbar />
+      <h1 className="username-heading" >Hi {user?.username}</h1>
+
+
       <div className="dashboard-grid">
-        <h1>Hi {user?.username}</h1>
+
+
         {data ? (
           data?.map((course: any) => (
             <div key={course._id} className="dashboard-card">
-              <button onClick={() => {
+              <button className="view-button" 
+               onClick={() => {
                 handleChange(course?._id);
               }}>
-                Show The Progress
+                View The Progress
                 <FiArrowUpRight
                   size={20}
+                 
                 />
               </button>
-              <h3>{course?.course}</h3>
-              <p>{course?.createdAt}</p>
+              <h3> Course Name: {course?.course}</h3>
+              <p> Joined Date: {convertTime(course?.createdAt) }</p>
             </div>
           ))
         ) : (
