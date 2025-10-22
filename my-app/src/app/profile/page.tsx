@@ -15,7 +15,7 @@ export default function Viwprofile() {
     const router = useRouter();
     useEffect(() => {
         const user = localStorage.getItem("user");
-        const userDetails = user ? JSON.parse(user).userDetails : ""
+        const userDetails = user ? JSON.parse(user).userDetails : "";
         setUser(userDetails);
         const token = user ? JSON.parse(user).userDetails?.token : null;
         if (!token) {
