@@ -26,6 +26,7 @@ export default function ViewDashbord() {
   };
 
   useEffect(() => {
+    try{
     const username = localStorage.getItem("user") || "";
     const userDetails = user ? JSON.parse(username).userDetails : ""
     setUser(userDetails);
@@ -46,6 +47,9 @@ export default function ViewDashbord() {
       .catch((error) => {
         console.error("Error fetching dashboard stats:", error);
       });
+      }catch(e){
+      console.error("Error parsing user:", e);
+      }
   }, [courseId]);
 
   return (

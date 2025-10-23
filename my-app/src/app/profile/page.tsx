@@ -14,6 +14,7 @@ export default function Viwprofile() {
     const [analytics, setAnalytics] = useState<any>([]);
     const router = useRouter();
     useEffect(() => {
+        try{
         const user = localStorage.getItem("user");
         const userDetails = user ? JSON.parse(user).userDetails : "";
         setUser(userDetails);
@@ -37,6 +38,10 @@ export default function Viwprofile() {
             .catch((error) => {
                 console.error("Error fetching dashboard stats:", error);
             });
+            }
+        catch(e){
+        console.error("Error parsing user:", e);
+        }
     }, []);
 
     return (
@@ -60,12 +65,12 @@ export default function Viwprofile() {
                 </div>
                 <div>
                     <h2 style={{textAlign: "center", boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px", background: "yellow"}}>Analytics</h2>
-                    {analytics.length > 0 ? analytics.map((elem: any) => {
+                    {analytics.length > 0 ? analytics.map((elem: any, idx: number) => {
                         return ((
                             <div style={{
                                 boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
                     padding: "10px", borderRadius: "5px", width: "100%", margin: "auto",
-                }} key={elem.courseId} >
+                }} key={idx} >
                                 <h3 style={{marginTop: "5px", textAlign: "center", boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px", background: "yellow"}}>{elem.courseName}</h3>
                                 <ul>
                                     <li>Total Lessons: <span style={{fontWeight: "bolder", background: "#969d5c"}}>{elem.totalLessons}</span></li>
